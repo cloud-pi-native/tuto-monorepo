@@ -1,0 +1,16 @@
+{{- if or .Values.client.env .Values.global.env -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "template.fullname" . }}-client
+  labels:
+    {{- include "template.labels" . | nindent 4 }}
+    {{- include "template.client.selectorLabels" . | nindent 4 }}
+data:
+  {{- if .Values.global.env -}}
+  {{- include "template.env" .Values.global | indent 2 }}
+  {{- end -}}
+  {{- if .Values.client.env -}}
+  {{- include "template.env" .Values.client | indent 2 }}
+  {{- end -}}
+{{- end -}}

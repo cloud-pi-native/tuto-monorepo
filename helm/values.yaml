@@ -1,0 +1,105 @@
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+global:
+  env: {}
+  secrets: {}
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+  - tuto-mono.dev.numerique-interieur.com
+  tls: []
+  #  - secretName: tuto-mono.dev.numerique-interieur.com
+  #    hosts:
+  #      - tuto-mono.dev.numerique-interieur.com
+
+client:
+  replicaCount: 1
+  image:
+    repository: harbor.apps.c6.numerique-interieur.com/mi-test/tuto-client
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+    pullSecret: registry-pull-secret
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  env: {}
+  secrets: {}
+  service:
+    type: ClusterIP
+    port: 80
+  container:
+    port: 8080
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+server:
+  replicaCount: 1
+  image:
+    repository: harbor.apps.c6.numerique-interieur.com/mi-test/tuto-server
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+    pullSecret: registry-pull-secret
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  env: {}
+  secrets: {}
+  service:
+    type: ClusterIP
+    port: 80
+  container:
+    port: 3000
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

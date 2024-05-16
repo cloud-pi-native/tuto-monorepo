@@ -1,0 +1,29 @@
+{
+  "name": "tuto-monorepo",
+  "version": "1.0.0",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "install": "bun install --cwd ./apps/server; bun install --cwd ./apps/client",
+    "docker:dev": "docker compose -f ./docker/docker-compose.dev.yml up",
+    "docker:dev:build": "export COMPOSE_FILE=./docker/docker-compose.dev.yml && cd $(dirname $COMPOSE_FILE) && docker buildx bake --file $(basename $COMPOSE_FILE) --load && cd - > /dev/null",
+    "docker:dev:delete": "docker compose -f ./docker/docker-compose.dev.yml down",
+    "docker:prod": "docker compose -f ./docker/docker-compose.prod.yml up",
+    "docker:prod:build": "export COMPOSE_FILE=./docker/docker-compose.prod.yml && cd $(dirname $COMPOSE_FILE) && docker buildx bake --file $(basename $COMPOSE_FILE) --load && cd - > /dev/null",
+    "docker:prod:delete": "docker compose -f ./docker/docker-compose.prod.yml down",
+    "kube:init": "ci/kind/run.sh -i -d api.domain.local,doc.domain.local",
+    "kube:dev:build": "ci/kind/run.sh -c create,build -f ./docker/docker-compose.dev.yml",
+    "kube:dev:load": "ci/kind/run.sh -c create,load -f ./docker/docker-compose.dev.yml",
+    "kube:dev:run": "ci/kind/run.sh -c create,dev",
+    "kube:dev": "bun run kube:dev:build && bun run kube:dev:run",
+    "kube:prod:build": "ci/kind/run.sh -c create,build -f ./docker/docker-compose.prod.yml",
+    "kube:prod:load": "ci/kind/run.sh -c create,load -f ./docker/docker-compose.prod.yml",
+    "kube:prod:run": "ci/kind/run.sh -c create,prod",
+    "kube:prod": "bun run kube:prod:build && bun run kube:prod:run",
+    "kube:e2e": "TARGET_HOST=api.domain.local TARGET_PORT=80 bun run kube:dev; bun run test:e2e",
+    "kube:e2e-ci": "TARGET_HOST=api.domain.local TARGET_PORT=80 bun run kube:prod; bun run test:e2e-ci",
+    "kube:clean": "ci/kind/run.sh -c clean",
+    "kube:delete": "ci/kind/run.sh -c delete"
+  },
+  "packageManager": "bun@1.1.8"
+}

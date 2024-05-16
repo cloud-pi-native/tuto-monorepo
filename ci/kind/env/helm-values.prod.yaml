@@ -1,0 +1,23 @@
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+  - example.domain.local
+
+server:
+  image: 
+    repository: tuto-monorepo/server
+    tag: prod
+    pullPolicy: Never
+    pullSecret: null
+
+client:
+  image: 
+    repository: tuto-monorepo/client
+    tag: prod
+    pullPolicy: Never
+    pullSecret: null
+  env:
+    SERVER_HOST: null
+    VITE_SERVER_HOST: http://example.domain.local

@@ -1,0 +1,37 @@
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+  - example.domain.local
+
+server:
+  image: 
+    repository: tuto-monorepo/server
+    tag: dev
+    pullPolicy: Never
+    pullSecret: null
+  extraVolumes:
+  - name: dev-workspace
+    path: /app/apps/server/src
+    type: hostPath
+  extraVolumeMounts:
+  - name: dev-workspace
+    mountPath: /app/src
+
+client:
+  image: 
+    repository: tuto-monorepo/client
+    tag: dev
+    pullPolicy: Never
+    pullSecret: null
+  extraVolumes:
+  - name: dev-workspace
+    path: /app/apps/client/src
+    type: hostPath
+  extraVolumeMounts:
+  - name: dev-workspace
+    mountPath: /app/src
+  env:
+    SERVER_HOST: null
+    VITE_SERVER_HOST: http://example.domain.local

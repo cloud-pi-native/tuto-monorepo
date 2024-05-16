@@ -1,0 +1,45 @@
+include:
+  - project: $CATALOG_PATH
+    file:
+      - vault-ci.yml
+      - kaniko-ci.yml
+      - sonar-ci.yml
+    ref: main
+
+default:
+  image: alpine:latest
+
+variables:
+  REGISTRY_URL: ${REGISTRY_HOST}/${PROJECT_PATH}
+
+stages:
+  - read-secret
+  - check-quality
+  - docker-build
+
+read_secret:
+  stage: read-secret
+  extends: .vault:read_secret
+
+sonarqube:
+  variables:
+    SONAR_PROJECT_KEY: ${PROJECT_KEY}
+  stage: check-quality
+  extends: .sonar:sonar-scanner
+  allow_failure: true
+
+docker-build-client:
+  variables:
+    WORKING_DIR: ./apps/client
+    DOCKERFILE: ./apps/client/Dockerfile
+    IMAGE_NAMES: tuto-client:1.0.0 tuto-client:latest
+  stage: docker-build
+  extends: .kaniko:build-push
+
+docker-build-server:
+  variables:
+    WORKING_DIR: ./apps/server
+    DOCKERFILE: ./apps/server/Dockerfile
+    IMAGE_NAMES: tuto-server:1.0.0 tuto-server:latest
+  stage: docker-build
+  extends: .kaniko:build-push

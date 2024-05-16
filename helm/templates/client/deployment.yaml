@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "template.fullname" . }}-client
+  labels:
+    {{- include "template.labels" . | nindent 4 }}
+    {{- include "template.client.selectorLabels" . | nindent 4 }}
+spec:
+  {{- if not .Values.client.autoscaling.enabled }}
+  replicas: {{ .Values.client.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "template.client.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.client.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "template.client.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.client.image.pullSecret }}
+      imagePullSecrets:
+        - name: "{{- .Values.client.image.pullSecret }}"
+      {{- end }}
+      serviceAccountName: {{ include "template.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.client.podSecurityContext | nindent 8 }}
+      containers:
+        - name: client
+          securityContext:
+            {{- toYaml .Values.client.securityContext | nindent 12 }}
+          image: "{{ .Values.client.image.repository }}:{{ .Values.client.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.client.image.pullPolicy }}
+          envFrom:
+            {{- if or .Values.global.env .Values.client.env }}
+            - configMapRef:
+                name: {{ include "template.fullname" . }}-client
+            {{- end }}
+            {{- if or .Values.global.secrets .Values.client.secrets }}
+            - secretRef:
+                name: {{ include "template.fullname" . }}-client
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.client.container.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.client.resources | nindent 12 }}
+      {{- with .Values.client.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.client.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.client.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

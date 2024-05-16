@@ -1,0 +1,22 @@
+name: Repo sync with Cloud π Native
+
+on:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    name: Sync repo with Cloud π Native
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checks-out repository
+        uses: actions/checkout@v3
+      - name: Send a sync request to DSO api
+        run: |
+          sh ./ci/mirror.sh \
+            -a "${{ env.DSO_API_URL }}" \
+            -b "${{ github.ref_name }}" \
+            -g "${{ secrets.GITLAB_TRIGGER_TOKEN }}" \
+            -i "${{ secrets.GITLAB_PROJECT_ID }}"
