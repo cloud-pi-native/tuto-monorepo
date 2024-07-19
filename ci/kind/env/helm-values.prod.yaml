@@ -19,5 +19,4 @@ client:
     pullPolicy: Never
     pullSecret: null
   env:
-    SERVER_HOST: null
     VITE_SERVER_HOST: http://example.domain.local

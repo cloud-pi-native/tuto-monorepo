@@ -8,7 +8,7 @@ services:
       target: dev
     restart: always
     ports:
-      - 3000:3000
+      - 8081:8081
     volumes:
       - ../apps/server:/app
       - /app/node_modules
@@ -26,7 +26,7 @@ services:
     ports:
       - 8080:8080
     environment:
-      VITE_SERVER_HOST: http://localhost:3000
+      VITE_SERVER_HOST: http://localhost:8081
     volumes:
       - ../apps/client:/app
       - /app/node_modules

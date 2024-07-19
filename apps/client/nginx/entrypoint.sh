@@ -13,7 +13,7 @@ echo "Replacing env constants in JS"
 for file in $ROOT_DIR/assets/*.js; do
   echo "Processing $file ...";
 
-  populate SERVER_HOST $file
+  populate VITE_SERVER_HOST $file
 done
 
 nginx -g 'daemon off;'

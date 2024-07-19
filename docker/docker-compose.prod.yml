@@ -8,7 +8,7 @@ services:
       target: prod
     restart: always
     ports:
-      - 3000:3000
+      - 8081:8081
     networks:
       - tuto-monorepo-network
 
@@ -23,7 +23,7 @@ services:
     ports:
       - 8080:8080
     environment:
-      SERVER_HOST: http://localhost:3000
+      VITE_SERVER_HOST: http://localhost:8081
     networks:
       - tuto-monorepo-network
 

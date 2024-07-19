@@ -33,5 +33,4 @@ client:
   - name: dev-workspace
     mountPath: /app/src
   env:
-    SERVER_HOST: null
     VITE_SERVER_HOST: http://example.domain.local

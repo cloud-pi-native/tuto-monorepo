@@ -32,5 +32,5 @@ COPY --chown=bun:root --from=install /app/package.json /app/package.json
 COPY --chown=bun:root --from=install /app/node_modules /app/node_modules
 COPY ./ ./
 USER bun
-EXPOSE 8080/tcp
+EXPOSE 8081/tcp
 ENTRYPOINT [ "bun", "run", "/app/src/index.ts" ]
