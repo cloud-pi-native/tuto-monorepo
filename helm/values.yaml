@@ -86,7 +86,7 @@ server:
     type: ClusterIP
     port: 80
   container:
-    port: 3000
+    port: 8081
   resources:
     limits:
       cpu: 200m
