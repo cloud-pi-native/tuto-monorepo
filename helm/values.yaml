@@ -103,3 +103,6 @@ server:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+vso:
+  enabled: false
