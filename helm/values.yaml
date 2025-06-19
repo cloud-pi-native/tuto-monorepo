@@ -14,16 +14,16 @@ ingress:
   className: ""
   annotations: {}
   hosts:
-  - tuto-mono.dev.numerique-interieur.com
+  - tuto-mono.formation-app.cpin.numerique-interieur.com
   tls: []
-  #  - secretName: tuto-mono.dev.numerique-interieur.com
+  #  - secretName: tuto-mono.formation-app.cpin.numerique-interieur.com
   #    hosts:
-  #      - tuto-mono.dev.numerique-interieur.com
+  #      - tuto-mono.formation-app.cpin.numerique-interieur.com
 
 client:
   replicaCount: 1
   image:
-    repository: harbor.apps.c6.numerique-interieur.com/mi-test/tuto-client
+    repository: harbor.formation.cpin.numerique-interieur.com/tobi/tuto-client
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
@@ -65,7 +65,7 @@ client:
 server:
   replicaCount: 1
   image:
-    repository: harbor.apps.c6.numerique-interieur.com/mi-test/tuto-server
+    repository: harbor.formation.cpin.numerique-interieur.com/tobi/tuto-server
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
@@ -105,4 +105,4 @@ server:
   affinity: {}
 
 vso:
-  enabled: false
+  enabled: true

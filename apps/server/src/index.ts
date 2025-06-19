@@ -9,6 +9,7 @@ const CORS_HEADERS = {
 const server = Bun.serve({
   port: 8081,
   fetch(request) {
+    console.log(`Received request: ${request.method} ${request.url}`)
     return new Response(JSON.stringify({ docUrl: 'https://cloud-pi-native.fr', githubUrl: 'https://github.com/cloud-pi-native' }), CORS_HEADERS)
   },
 })
